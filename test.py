@@ -39,7 +39,9 @@ except Exception as e:
 
 # Reading and displaying the image
 try:
-    img = cv.imread(image_path)
+    first_path = 'C:\\Users\\MSI\\OneDrive\\Bureau\\pfe_project\\litbebe_server\\current\\'
+    print("Image path:", first_path + image_path)
+    img = cv.imread( first_path + image_path)
     if img is None:
         raise ValueError("Image not found or unable to read")
     img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
@@ -47,14 +49,14 @@ try:
     plt.title("test image")
     plt.xticks([]) # Hide x-axis
     plt.yticks([]) # Hide y-axis
-    plt.show()
+    #plt.show()
 except Exception as e:
     print(f"Error reading or displaying the image: {e}")
     exit()
 
 # Preprocess the image
 try:
-    image = tf.keras.preprocessing.image.load_img(image_path, target_size=(128, 128))
+    image = tf.keras.preprocessing.image.load_img(first_path + image_path, target_size=(128, 128))
     input_arr = tf.keras.preprocessing.image.img_to_array(image)
     input_arr = np.array([input_arr]) # Convert single image to batch
     print(input_arr.shape)
@@ -81,7 +83,7 @@ try:
     plt.title(f"Position Name: {model_prediction}")
     plt.xticks([]) # Hide x-axis
     plt.yticks([]) # Hide y-axis
-    plt.show()
+    #plt.show()
 except Exception as e:
     print(f"Error mapping result to class name or displaying: {e}")
     exit()
@@ -89,6 +91,7 @@ except Exception as e:
 # Update the prediction result in Firebase Realtime Database
 try:
     result_ref = db.reference('/camera/ai_listener')
+    print(model_prediction)
     result_ref.set(model_prediction)
 except Exception as e:
     print(f"Error updating prediction result in Firebase: {e}")
